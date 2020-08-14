@@ -1,7 +1,12 @@
 const express = require('express');
+const generateServerCode = require('../../middleware/error/index')
 
-module.exports = ({ config, realm }) => {
+module.exports = ({
+  config,
+  realm
+}) => {
   const app = express.Router();
+
 
   // Retrieve guaranteed random ID.
   app.get('/id', (req, res) => {
@@ -16,9 +21,7 @@ module.exports = ({ config, realm }) => {
 
       return res.send(clientsIds);
     }
-
-    res.sendStatus(401);
+    generateServerCode(res, 401, "No peer discovery")
   });
-
   return app;
 };

@@ -3,8 +3,15 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const publicContent = require('../../app.json');
 
-module.exports = ({ config, realm, messageHandler }) => {
-  const authMiddleware = require('./middleware/auth')({ config, realm });
+module.exports = ({
+  config,
+  realm,
+  messageHandler
+}) => {
+  const authMiddleware = require('./middleware/auth')({
+    config,
+    realm
+  });
 
   const app = express.Router();
 
@@ -16,10 +23,18 @@ module.exports = ({ config, realm, messageHandler }) => {
     res.send(publicContent);
   });
 
-  app.use('/:key', require('./v1/public')({ config, realm }));
-  app.use('/:key/:id/:token', authMiddleware , jsonParser, require('./v1/calls')({ realm, messageHandler }));
+  app.use('/:key', require('./v1/public')({
+    config,
+    realm
+  }));
+  app.use('/:key/:id/:token', authMiddleware, jsonParser, require('./v1/calls')({
+    realm,
+    messageHandler
+  }));
   // console.log('realm', realm)
-  app.use('/:key/:id/:token/room', authMiddleware, jsonParser, require('./v1/rooms')({ realm }));
+  app.use('/:key/:id/:token/room', authMiddleware, jsonParser, require('./v1/rooms')({
+    realm
+  }));
 
   return app;
 };
